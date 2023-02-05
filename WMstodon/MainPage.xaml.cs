@@ -44,5 +44,24 @@ namespace WMstodon
 
             //await LoadFeed();
         }
+
+        private async void LogOutButton_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog confirmLogoutDialog = new ContentDialog
+            {
+                Title = "Are you sure you want to log out?",
+                CloseButtonText = "Cancel",
+                PrimaryButtonText = "Log Out"
+            };
+
+            ContentDialogResult result = await confirmLogoutDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                localSettings.Values["instanceURL"] = null;
+                localSettings.Values["accessToken"] = null;
+                Frame.Navigate(typeof(SelectInstancePage), null);
+            }
+        }
     }
 }

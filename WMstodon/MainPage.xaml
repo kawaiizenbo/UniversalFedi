@@ -9,9 +9,12 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Image x:Name="myAvatar" HorizontalAlignment="Left" Height="40" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="40"/>
-        <TextBlock x:Name="DisplayNameTextBlock" HorizontalAlignment="Left" Margin="60,0,0,30" TextWrapping="Wrap" Text="Loading..." VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="UsernameTextBlock" HorizontalAlignment="Left" Margin="60,0,0,15" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom" FontSize="12" Foreground="#FF777777"/>
 
+        <Grid Height="60" Margin="0" VerticalAlignment="Bottom">
+            <Image x:Name="myAvatar" HorizontalAlignment="Left" Height="40" Margin="10,0,0,0" VerticalAlignment="Center" Width="40"/>
+            <TextBlock x:Name="DisplayNameTextBlock" HorizontalAlignment="Left" Margin="60,0,0,30" TextWrapping="Wrap" Text="Loading..." VerticalAlignment="Bottom"/>
+            <TextBlock x:Name="UsernameTextBlock" HorizontalAlignment="Left" Margin="60,0,0,15" TextWrapping="Wrap" Text="Loading..." VerticalAlignment="Bottom" FontSize="12" Foreground="#FF777777"/>
+            <Button x:Name="LogOutButton" Content="Log Out" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center" Width="75" Click="LogOutButton_Click"/>
+        </Grid>
     </Grid>
 </Page>
