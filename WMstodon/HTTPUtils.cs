@@ -27,7 +27,7 @@ namespace WMstodon
         {
             HttpClient generic = new HttpClient();
             generic.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", (string)localSettings.Values["accessToken"]);
-            HttpResponseMessage response = await generic.GetAsync(URL);
+            HttpResponseMessage response = await generic.GetAsync(new Uri(URL));
             generic.Dispose();
             return new KeyValuePair<HttpStatusCode, string>(response.StatusCode, await response.Content.ReadAsStringAsync());
         }
@@ -46,7 +46,7 @@ namespace WMstodon
         {
             HttpClient generic = new HttpClient();
             generic.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", (string)localSettings.Values["accessToken"]);
-            HttpResponseMessage response = await generic.PostAsync(URL, data);
+            HttpResponseMessage response = await generic.PostAsync(new Uri(URL), data);
             generic.Dispose();
             return new KeyValuePair<HttpStatusCode, string>(response.StatusCode, await response.Content.ReadAsStringAsync());
         }

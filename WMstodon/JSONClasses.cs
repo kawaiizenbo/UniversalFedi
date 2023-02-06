@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WMstodon
 {
@@ -87,7 +83,7 @@ namespace WMstodon
         public bool muted { get; set; }
         public bool bookmarked { get; set; }
         public string content { get; set; }
-        public object reblog { get; set; }
+        public Status reblog { get; set; }
         public MApplication application { get; set; }
         public Account account { get; set; }
         public Attachment[] media_attachments { get; set; }
@@ -96,6 +92,7 @@ namespace WMstodon
         public object[] emojis { get; set; }
         public object card { get; set; }
         public object poll { get; set; }
+        public string additional { get; set; }
     }
 
     public class Feed

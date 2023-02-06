@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -24,6 +16,7 @@ namespace WMstodon
     {
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         Account myAccount;
+        public ObservableCollection<Status> Statuses { get; } = new ObservableCollection<Status>();
 
         public MainPage()
         {
@@ -40,9 +33,40 @@ namespace WMstodon
 
             BitmapImage bitmap = new BitmapImage();
             bitmap.UriSource = new Uri(myAccount.avatar_static);
-            myAvatar.Source = bitmap;
+            AvatarImage.Source = bitmap;
 
-            //await LoadFeed();
+            await LoadFeed();
+        }
+
+        private async Task LoadFeed()
+        {
+            string feedJSON = ($"{{\"statuses\": {(await HTTPUtils.GETAsync("/api/v1/timelines/home")).Value}}}");
+            Feed feed = new Feed();
+            feed = JsonConvert.DeserializeObject<Feed>(feedJSON);
+            foreach (Status s in feed.statuses)
+            {
+                Status status = s;
+                string usernameFull = $"@{status.account.username}@{status.url.Split('/')[2]}";
+                if (status.reblog != null)
+                {
+                    usernameFull = $"@{status.reblog.account.username}@{status.reblog.url.Split('/')[2]}";
+                    status = status.reblog;
+                    status.additional += $"Reblogged by {s.account.display_name} | ";
+                }
+                status.content = Windows.Data.Html.HtmlUtilities.ConvertToText(status.content);
+                if (status.media_attachments.Length != 0)
+                    status.additional += $"{status.media_attachments.Length} " + (status.media_attachments.Length == 1 ? "attachment" : "attachments") + " | ";
+                if (status.sensitive)
+                {
+                    status.content = status.spoiler_text;
+                    status.additional += "Tap to view more | ";
+                }
+                if (status.account.display_name == "")
+                    status.account.display_name = status.account.username;
+                status.additional += $"{status.favourites_count} Favorites, {status.reblogs_count} Reblogs, {status.replies_count} Replies";
+                status.account.acct = usernameFull;
+                Statuses.Add(status);
+            }
         }
 
         private async void LogOutButton_Click(object sender, RoutedEventArgs e)
@@ -62,6 +86,12 @@ namespace WMstodon
                 localSettings.Values["accessToken"] = null;
                 Frame.Navigate(typeof(SelectInstancePage), null);
             }
+        }
+
+        private void FeedListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Status passedStatus = (Status)feedListView.SelectedItem;
+            Frame.Navigate(typeof(StatusPage), passedStatus.url);
         }
     }
 }
