@@ -93,5 +93,15 @@ namespace WMstodon
             Status passedStatus = (Status)feedListView.SelectedItem;
             Frame.Navigate(typeof(StatusPage), passedStatus.url);
         }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MainPage), null);
+        }
+
+        private void NewPostButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(NewStatusPage), null);
+        }
     }
 }
