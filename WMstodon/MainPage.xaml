@@ -9,7 +9,23 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <ListView x:Name="feedListView" Margin="0,0,0,60" ItemsSource="{x:Bind Statuses}" SelectionChanged="FeedListView_SelectionChanged">
+        <CommandBar>
+            <CommandBar.Content>
+                <TextBlock Text="Home Timeline" Margin="12,14"/>
+            </CommandBar.Content>
+            
+            <AppBarButton Icon="Add" Label="New Post" Click="NewPostButton_Click"/>
+            <AppBarButton Icon="Refresh" Label="Refresh" Click="RefreshButton_Click"/>
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="&#xE80F; Home Timeline" FontFamily="Segoe MDL2 Assets"/>
+                <AppBarButton Label="&#xE716; Local Timeline" FontFamily="Segoe MDL2 Assets"/>
+                <AppBarButton Label="&#xE774; Federated Timeline" FontFamily="Segoe MDL2 Assets"/>
+                <AppBarButton Label="&#xE77B; My Account" FontFamily="Segoe MDL2 Assets"/>
+                <AppBarButton Label="&#xF3B1; Log Out" Click="LogOutButton_Click" FontFamily="Segoe MDL2 Assets"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+        <ListView x:Name="feedListView" Margin="0,48,0,60" ItemsSource="{x:Bind Statuses}" SelectionChanged="FeedListView_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:Status">
                     <Grid Width="Auto" Height="Auto" Padding="0,10" Margin="0,0,0,15">
@@ -26,13 +42,10 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Grid Height="60" Margin="0" VerticalAlignment="Bottom">
+        <Grid Height="60" Margin="0" VerticalAlignment="Bottom" Background="#FFE6E6E6">
             <Image x:Name="AvatarImage" HorizontalAlignment="Left" Height="40" Margin="10,0,0,0" VerticalAlignment="Center" Width="40"/>
             <TextBlock x:Name="DisplayNameTextBlock" HorizontalAlignment="Left" Margin="60,0,0,30" TextWrapping="Wrap" Text="Loading..." VerticalAlignment="Bottom"/>
             <TextBlock x:Name="UsernameTextBlock" HorizontalAlignment="Left" Margin="60,0,0,15" TextWrapping="Wrap" Text="Loading..." VerticalAlignment="Bottom" FontSize="12" Foreground="#FF777777"/>
-            <Button x:Name="LogOutButton" Content="&#xF3B1;" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center" Width="40" Click="LogOutButton_Click" Background="#00000000" FontFamily="Segoe MDL2 Assets" Height="40" FontSize="24" Padding="0"/>
-            <Button x:Name="RefreshButton" Content="&#xE72C;" HorizontalAlignment="Right" Margin="0,0,60,0" VerticalAlignment="Center" Width="40" Click="RefreshButton_Click" Background="#00000000" FontFamily="Segoe MDL2 Assets" Height="40" FontSize="24" Padding="0"/>
-            <Button x:Name="NewPostButton" Content="&#xE710;" HorizontalAlignment="Right" Margin="0,0,110,0" VerticalAlignment="Center" Width="40" Click="NewPostButton_Click" Background="#00000000" FontFamily="Segoe MDL2 Assets" Height="40" FontSize="24" Padding="0"/>
         </Grid>
     </Grid>
 </Page>

@@ -28,7 +28,7 @@ namespace WMstodon
         {
             string statusURL = e.Parameter.ToString();
             string statusJSON = 
-                (await HTTPUtils.GETAsync("https://" + statusURL.Split('/')[2] + "/api/v1/statuses/" + statusURL.Split('/').Last())).Value;
+                await (await HTTPUtils.GETAsync("https://" + statusURL.Split('/')[2] + "/api/v1/statuses/" + statusURL.Split('/').Last())).Content.ReadAsStringAsync();
             status = JsonConvert.DeserializeObject<Status>(statusJSON);
             DisplayNameTextBlock.Text = status.account.display_name == "" ? status.account.username : status.account.display_name;
             UsernameTextBlock.Text = $"@{status.account.username}@{status.url.Split('/')[2]}";

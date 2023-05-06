@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
@@ -25,7 +26,7 @@ namespace WMstodon
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string accountJSON = (await HTTPUtils.GETAsync("/api/v1/accounts/verify_credentials")).Value;
+            string accountJSON = await (await HTTPUtils.GETAsync("/api/v1/accounts/verify_credentials")).Content.ReadAsStringAsync();
             myAccount = JsonConvert.DeserializeObject<Account>(accountJSON);
 
             DisplayNameTextBlock.Text = $"{myAccount.display_name}";
@@ -40,16 +41,16 @@ namespace WMstodon
 
         private async Task LoadFeed()
         {
-            string feedJSON = ($"{{\"statuses\": {(await HTTPUtils.GETAsync("/api/v1/timelines/home")).Value}}}");
+            string feedJSON = ($"{{\"statuses\": {(await HTTPUtils.GETAsync("/api/v1/timelines/home")).Content.ReadAsStringAsync().Result}}}");
             Feed feed = new Feed();
             feed = JsonConvert.DeserializeObject<Feed>(feedJSON);
             foreach (Status s in feed.statuses)
             {
                 Status status = s;
-                string usernameFull = $"@{status.account.username}@{status.url.Split('/')[2]}";
+                string usernameFull = $"@{status.account.username}@{status.account.url.Split('/')[2]}";
                 if (status.reblog != null)
                 {
-                    usernameFull = $"@{status.reblog.account.username}@{status.reblog.url.Split('/')[2]}";
+                    usernameFull = $"@{status.reblog.account.username}@{status.reblog.account.url.Split('/')[2]}";
                     status = status.reblog;
                     status.additional += $"Reblogged by {s.account.display_name} | ";
                 }

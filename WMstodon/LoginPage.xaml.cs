@@ -52,13 +52,13 @@ namespace WMstodon
             postopts["grant_type"] = "authorization_code";
             postopts["code"] = AuthCodeTextBox.Text;
             postopts["scope"] = "read write push";
-            KeyValuePair<HttpStatusCode, string> response =
+            HttpResponseMessage response =
                 await HTTPUtils.POSTAsync("/oauth/token", new FormUrlEncodedContent(postopts));
-            if (response.Key == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                JObject appResponseObj = JObject.Parse(response.Value);
+                JObject appResponseObj = JObject.Parse(await response.Content.ReadAsStringAsync());
                 localSettings.Values["accessToken"] = (string)appResponseObj["access_token"];
-                if ((await HTTPUtils.GETAsync("/api/v1/accounts/verify_credentials")).Key != HttpStatusCode.OK)
+                if ((await HTTPUtils.GETAsync("/api/v1/accounts/verify_credentials")).StatusCode != HttpStatusCode.OK)
                 {
                     ErrorTextBlock.Text = "Could not log into service";
                     return;
@@ -67,7 +67,7 @@ namespace WMstodon
             }
             else
             {
-                ErrorTextBlock.Text = "Could not log into service:\n" + response.Key;
+                ErrorTextBlock.Text = "Could not log into service:\n" + response.StatusCode;
             }
         }
     }

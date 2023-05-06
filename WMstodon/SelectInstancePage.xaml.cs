@@ -29,15 +29,15 @@ namespace WMstodon
             postopts["redirect_uris"] = "urn:ietf:wg:oauth:2.0:oob";
             postopts["scopes"] = "read write push";
             postopts["website"] = "https://github.com/kawaiizenbo/WMStodon";
-            KeyValuePair<HttpStatusCode, string> response = 
+            HttpResponseMessage response = 
                 await HTTPUtils.POSTGenericAsync(InstanceURLTextBox.Text + "/api/v1/apps", new FormUrlEncodedContent(postopts));
-            if (response.Key == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                JObject appResponseObj = JObject.Parse(response.Value);
+                JObject appResponseObj = JObject.Parse(await response.Content.ReadAsStringAsync());
                 localSettings.Values["instanceURL"] = InstanceURLTextBox.Text;
                 Frame.Navigate(typeof(LoginPage), appResponseObj);
             }
-            else ErrorTextBlock.Text = "Could not create application on instance:\n" + response.Key;
+            else ErrorTextBlock.Text = "Could not create application on instance:\n" + response.StatusCode;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
