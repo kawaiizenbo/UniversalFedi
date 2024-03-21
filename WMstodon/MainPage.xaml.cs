@@ -33,7 +33,17 @@ namespace WMstodon
             UsernameTextBlock.Text = $"@{myAccount.username}@{new Uri((string)localSettings.Values["instanceURL"]).DnsSafeHost}";
 
             BitmapImage bitmap = new BitmapImage();
-            bitmap.UriSource = new Uri(myAccount.avatar_static);
+            try
+            {
+                bitmap.UriSource = new Uri(myAccount.avatar_static);
+            }
+            catch
+            {
+                localSettings.Values["instanceURL"] = null;
+                localSettings.Values["accessToken"] = null;
+                Frame.Navigate(typeof(SelectInstancePage), null);
+                return;
+            }
             AvatarImage.Source = bitmap;
 
             await LoadFeed();
