@@ -26,7 +26,20 @@ namespace WMstodon
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string accountJSON = await (await HTTPUtils.GETAsync("/api/v1/accounts/verify_credentials")).Content.ReadAsStringAsync();
+            string accountJSON;
+
+            try
+            {
+                accountJSON = await (await HTTPUtils.GETAsync("/api/v1/accounts/verify_credentials")).Content.ReadAsStringAsync();
+            }
+            catch
+            {
+                localSettings.Values["instanceURL"] = null;
+                localSettings.Values["accessToken"] = null;
+                Frame.Navigate(typeof(SelectInstancePage), null);
+                return;
+            }
+
             myAccount = JsonConvert.DeserializeObject<Account>(accountJSON);
 
             DisplayNameTextBlock.Text = $"{myAccount.display_name}";
