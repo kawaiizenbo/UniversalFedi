@@ -1,5 +1,5 @@
-# WMstodon
-Mastodon client for Windows 10 Mobile made without API Libraries
+# UniversalFedi
+Fedi client (Mastodon API) for Windows 10 Mobile made without API Libraries
 
 ## Requirements
  - Windows 10 Creators Update (version 1703) or later (or Windows 11)  

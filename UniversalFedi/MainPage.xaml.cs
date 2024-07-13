@@ -26,6 +26,21 @@ namespace UniversalFedi
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            string topString = "Loading";
+            switch (localSettings.Values["timelineMode"])
+            {
+                case "home":
+                    topString = "Home Timeline";
+                    break;
+                case "public":
+                    topString = "Federated Timeline";
+                    break;
+                case "public?local=true":
+                    topString = "Local Timeline";
+                    break;
+            }
+            TimelineText.Text = topString;
+
             string accountJSON;
 
             try
