@@ -1,4 +1,5 @@
 # UniversalFedi
+## this repo has moved https://git.kawaiizenbo.me/kawaiizenbo/UniversalFedi
 Fedi client (Mastodon API) for Windows 10 Mobile made without API Libraries
 
 ## Requirements
